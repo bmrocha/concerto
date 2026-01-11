@@ -1,33 +1,38 @@
-version: "3"
 services:
   db:
-    image: mysql
-    # utf8mb4 https://stackoverflow.com/a/53398381/1778068
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
-    restart: always
+    image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: concerto
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: concerto
       MYSQL_USER: concerto
       MYSQL_PASSWORD: concerto
     volumes:
-      - db:/var/lib/mysql
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
 
-  concerto:
-    image: concerto
-    restart: always
-    ports: 
-      - "80:80"
-    environment:
-      CONCERTO_DB_HOST: db
-      CONCERTO_DB_USER: concerto
-      CONCERTO_DB_PASSWORD: concerto
-      CONCERTO_DB_NAME: concerto
-    volumes:
-      - concerto:/home/app/concerto
-    depends_on: 
+  web:
+    build: .
+    ports:
+      - "3000:80"
+    depends_on:
       - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - RAILS_ENV=production
+      - SECRET_KEY_BASE=development_secret_key_base_for_testing
+    # volumes:
+    #   - .:/home/app/concerto
+      # Exclude vendor/bundle from the volume mount so the container's installed gems are used
+      # or we need to ensure the volume doesn't override it. 
+      # Since the Dockerfile installs to vendor/bundle inside the image, mounting . over it 
+      # will HIDE the installed gems if vendor/bundle is not also a volume.
+      # However, the Dockerfile has RUN commands that install gems. 
+      # If we mount ., we shadow the built files.
+      # Best practice for development is to use a named volume for vendor/bundle.
+      # - bundle_cache:/home/app/concerto/vendor/bundle
 
 volumes:
-  db:
-  concerto:
+  db_data:
+  bundle_cache:

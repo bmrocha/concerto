@@ -6,7 +6,6 @@ LABEL Author="team@concerto-signage.org"
 # because phusion says to...
 ENV HOME /root
 CMD ["/sbin/my_init"]
-#CMD ["/bin/bash", "-c", "cd /home/app/concerto && bundle exec rails server -b 0.0.0.0 -p 80"] #Bruno comentei essa linha para testar
 
 # set up for eastern timezone by default
 RUN apt-get update --fix-missing && ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime \
@@ -34,7 +33,7 @@ COPY config/database.yml.docker /home/app/concerto/config/database.yml
 #MODIFIQUEI AQUI BRUNO
 RUN mkdir -p /home/app/concerto/vendor/bundle \
 && chown -R app:app /home/app/concerto \
-&& setuser app bash --login -c "cd /home/app/concerto && gem install bundler -v '1.17.3' && RAILS_ENV=production bundle install --path vendor/bundle --verbose"
+&& setuser app bash --login -c "cd /home/app/concerto && gem install bundler -v '~> 1.17.3' && bundle config set --local path 'vendor/bundle' && RAILS_ENV=production bundle install --verbose"
 
 # set up the background worker
 RUN mkdir -p /etc/service/concerto_clockwork

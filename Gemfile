@@ -2,10 +2,13 @@
 source 'https://rubygems.org'
 
 # Lock the ruby version for now. We don't work on Ruby 2.7, so stick with Ruby 2.6
-ruby '~> 2.6.0'
+ruby '2.6.10'  # Aceita qualquer versão 2.6.x
+gem 'bigdecimal', '~> 1.4', '>= 1.4.1'
+gem 'date', '3.5.1'
+gem 'ffi', '~> 1.15.5'
 
 gem 'rails', '~> 4.2'
-gem 'nokogiri', '~> 1.13', '>= 1.13.10' #pin while on ruby < 2.7
+gem 'nokogiri', '~> 1.13.10', '< 1.14' #pin while on ruby < 2.7
 
 # Get the absolute path of this Gemfile so the includes below still work
 # when the current directory for a bundler command isn't the application's
@@ -25,6 +28,9 @@ end
 
 gem 'coffee-rails'
 gem 'execjs', '~> 2.2.2'
+
+gem 'mime-types'
+
 gem 'sass-rails'
 gem 'sprockets', '~> 2.12'
 # use nodejs instead of therubyracer for js engine for easier docker and future work
@@ -40,16 +46,17 @@ gem 'twitter-bootstrap-rails-confirm'
 gem 'responders', '~> 2.0'
 
 # RMagick is used for image resizing and processing
-gem 'rmagick', require: 'rmagick', platforms: :ruby
+gem 'rmagick', '~> 4.2', require: 'rmagick', platforms: :ruby
 
 # Attachable does all the file work.
 gem 'attachable'
 
-gem 'cancancan'
-gem 'devise', :git=> "https://github.com/plataformatec/devise.git", :branch => "3-stable"
+gem 'cancancan', '~> 3.3.0'
+gem 'devise', '~> 4.8'
 
-gem 'json'
+gem 'json', '~> 2.6.0'
 gem 'rubyzip', '~> 1.3.0'
+gem 'rake', '>= 13.0'
 
 # Process jobs in the background
 gem 'clockwork'
@@ -69,7 +76,7 @@ gem 'sqlite3', '~> 1.3.6', group: [:development, :test]
 gem 'mysql2', group: :mysql
 gem 'pg', '~> 0.18', group: :postgres
 
-gem 'public_activity'
+gem 'public_activity', '~> 1.6.0'
 
 gem 'concerto_docsplit'
 gem 'redcarpet', '~> 3.5.1'
@@ -84,7 +91,7 @@ group :development do
   gem 'i18n-tasks', '0.9.0'
   gem 'slop', '~> 3.6.0' # Required due to https://github.com/glebm/i18n-tasks/issues/118
   gem 'awesome_print'
-  gem 'rack-mini-profiler'
+  gem 'rack-mini-profiler', '~> 2.3'
 end
 
 gem 'i18n-js', '>= 3.0.0.rc8', '< 3.1.0'
